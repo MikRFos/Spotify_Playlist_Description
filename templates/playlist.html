@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--        BOOTSTRAP-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
+    <!--        Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=PT+Serif&display=swap"
+          rel="stylesheet">
+    <!--        My CSS-->
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Playlist Analysis</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarS">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarS">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('homepage') }}">Home</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section id="stats">
+    <div class="accordion" id="songAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                    Individual Song Stats
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                 data-bs-parent="#songAccordion">
+                <div class="accordion-body">
+                    <h2>General Statistics</h2>
+                    <h3>Most Common Key {{ data["key_mode"] }}</h3>
+                    <h3>Most Common Time Signature {{ data["signature_mode"] }}</h3>
+                    <h3>Average Tempo {{ data["average_tempo"]|round|int }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo"
+                        aria-expanded="flase" aria-controls="collapseTwo">
+                    Key Plot
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                 data-bs-parent="#songAccordion">
+                <div class="accordion-body">
+                    <img src="{{ url_for('plot_png', analysis=analysis)}}" alt="my plot">
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="false" aria-controls="collapseThree">
+                    General Playlist Stats
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                 data-bs-parent="#songAccordion">
+                <div class="accordion-body">
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item flex-fill  title-artist ">Song Title</li>
+                        <li class="list-group-item flex-fill stats">Key</li>
+                        <li class="list-group-item flex-fill stats">Tempo</li>
+                    </ul>
+                    {% for song in songs %}
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item flex-fill title-artist "><strong>{{ song["title"] }}</strong> by <em>{{
+                            song["artist"] }}</em></li>
+                        <li class="list-group-item flex-fill stats">{{song["key"] }}</li>
+                        <li class="list-group-item flex-fill stats">{{ song["tempo"]|round|int }} bpm</li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
